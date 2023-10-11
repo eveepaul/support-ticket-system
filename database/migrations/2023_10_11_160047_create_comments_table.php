@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tickets', function (Blueprint $table) {
-            $table->id()->index();
-            $table->string('title');
-            $table->string('description');
-            $table->string('image');
-            $table->enum('status', ['IN_PROGRESS', 'OPEN', 'CLOSED']);
-            $table->foreignId('user_id')->index();
-            $table->timestamps();
-
+        Schema::create('comments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('ticket_id');
+            $table->foreign('ticket_id')->references('id')->on('tickets')->cascadeOnDelete();
+            $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->string('image')->nullable();
+            $table->string('body');
+
+            $table->timestamps();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tickets');
+        Schema::dropIfExists('comments');
     }
 };
