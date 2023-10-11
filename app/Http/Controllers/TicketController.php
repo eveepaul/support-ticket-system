@@ -29,9 +29,24 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TicketRequest $request)
     {
         //
+        $ticket = new Ticket();
+        $ticket->title = $request->title;
+        $ticket->description = $request->description;
+        $ticket->status = $request->status;
+        if ($request->has('image')) {
+            $ticket->image = $request->image;
+        }
+        if (!$request->has('user_id')) {
+            $request['user_id'] = 1;
+        }
+
+        $ticket->user_id = $request->user_id;
+        $ticket->save();
+
+        return $request;
     }
 
     /**
