@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ticket;
+use App\Http\Requests\TicketRequest;
+use App\Http\Resources\TicketResource;
 use Illuminate\Http\Request;
+use App\Models\Ticket;
 
 class TicketController extends Controller
 {
@@ -13,6 +15,7 @@ class TicketController extends Controller
     public function index()
     {
         //
+        return Ticket::all();
     }
 
     /**
@@ -34,31 +37,29 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Ticket $ticket)
+    public function show(string $id)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Ticket $ticket)
-    {
-        //
+        return new TicketResource(Ticket::findOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Ticket $ticket)
+    public function update(TicketRequest $request, string $id)
     {
         //
+        $ticket = Ticket::findOrFail($id);
+        $ticket->title = $request->title;
+        $ticket->description = $request->description;
+        $ticket->save();
+        return $request;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ticket $ticket)
+    public function destroy(string $id)
     {
         //
     }
